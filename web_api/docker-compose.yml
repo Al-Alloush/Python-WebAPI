@@ -1,0 +1,56 @@
+version: '3.6'
+services: 
+    web:
+        build: .
+        container_name: web_api
+        #  mount this image as volume to don't rebuild the image all the time.
+        volumes: 
+            - .:/code
+        environment: 
+            FLASK_DEBUG: 1
+            FLASK_ENV: devalopment
+        entrypoint: 
+            - python
+            - app.py
+        ports: 
+            - "5000:5000"
+        networks: 
+            - web_api_network
+    
+    #--------------------------
+    redis:
+        image: "redis:latest"
+        container_name: redis_host
+        hostname: redis
+        volumes:
+          - type: volume
+            source: redisdata
+            target: /data
+        ports:
+          - "6379:6379"
+        networks:
+            - web_api_network
+        #restart: always
+    #--------------------------
+    redis-commander:
+        image: rediscommander/redis-commander:latest
+        container_name: redis_commander
+        hostname: redis-commander
+        # without this: Redis error Error: connect ECONNREFUSED 127.0.0.1:6379
+        environment:
+            - REDIS_HOSTS=local:redis:6379
+        ports:
+            - "8081:8081"
+        networks:
+            - web_api_network
+        #restart: always
+    #--------------------------
+
+volumes:
+    redisdata:
+
+
+networks:
+    # set all containers in external network
+    web_api_network:
+        external: true
