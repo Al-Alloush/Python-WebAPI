@@ -5,6 +5,7 @@ from flask_restful import Resource, Api
 from resources.sql_db_alchemy import db
 from models.User.UserModel import UserModel
 from API.User.UserLogin import UserLogin
+from API.User.UserRegister import UserRegister
 from resources.global_functions import (
     hashing_text, current_local_time
 )
@@ -22,6 +23,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 api = Api(app)
 
+api.add_resource(UserRegister, '/register')
 api.add_resource(UserLogin, '/login')
 
 
