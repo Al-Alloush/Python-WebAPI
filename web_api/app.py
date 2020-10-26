@@ -26,7 +26,7 @@ api = Api(app)
 api.add_resource(UserRegister, '/register')
 api.add_resource(UserLogin, '/login')
 
-
+# to create all tables with the first requst in app and add the SuperAdmin user
 @app.before_first_request
 def create_tables():
     db.create_all()

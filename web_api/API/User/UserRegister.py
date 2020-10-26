@@ -1,5 +1,6 @@
 import uuid, os
 from flask_restful import Resource, reqparse
+from controllers.User.UserRegister_crud import UserRegisterCRUD as ur_crud
 from models.User.UserModel import UserModel
 from resources.global_functions import (
     hashing_text, current_local_time
@@ -32,31 +33,9 @@ class UserRegister(Resource):
 
     def post(self):
         data = UserRegister.parser.parse_args()
-        # check if username or email not exit.
-        user = UserModel.find_user(data['username'], data['email']) 
-        if user is not None:
-            return {"message": "this user is existing before"}, 400
-
-        user = UserModel(
-            _id= str(uuid.uuid4()),
-            username=data['username'],
-            email=data['email'],
-            password=data['password'],
-            salt=str(os.urandom(32)),
-            first_name="",
-            last_name="",
-            birthday=data['birthday'],
-            userType=4,
-            login_date= current_local_time(),
-            acc_verified=False
-        )
-        try:
-            user.save_to_db()
-            check_user = UserModel.find_user(data['username'], data['email']) 
-            if check_user is not None:
-                return {"message": "add user successfully"}, 200
+        user = ur_crud(data["username"], data["email"], data["password"], data["birthday"])
+        create = user.create()
+        return create, create["status"]
             
-            return {"message": "somthing wrong!, please try again"}, 400
-        except Exception as ex:
-            return {"message": f"somthing wrong!"}, 500
+
 
