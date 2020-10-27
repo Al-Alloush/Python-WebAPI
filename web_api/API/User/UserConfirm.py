@@ -6,8 +6,4 @@ class UserConfirm(Resource):
     @classmethod
     def get(cls, token):
         activate = uc_crud.update_acc_verified(token)
-        if activate:
-            headers = {"Content-Type": "text/html"}
-            return {"message": 'confirm email successfully'}, 200
-  
-        return {"message": "failed to confirm email"}, 500
+        return activate, activate["status"]

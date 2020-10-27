@@ -1,6 +1,7 @@
 Flask
 Flask-RESTful
 flask_sqlalchemy
+flask_jwt_extended
 pymysql
 redis
 pytest

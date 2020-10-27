@@ -43,14 +43,14 @@ class UserModel(db.Model):
 
 
     @classmethod
-    def find_user(cls, username, email):
+    def find_user(cls, usernameOrEmail):
         try:
             # check if user email or username exist
-            user = cls.query.filter_by(username=username).first() # SELECT * FROM users WHERE username = username LIMIT 1"
+            user = cls.query.filter_by(username=usernameOrEmail).first() # SELECT * FROM users WHERE username = username LIMIT 1"
             if user is None:
-                user = cls.query.filter_by(email=email).first() # SELECT * FROM users WHERE email = email LIMIT 1"
+                user = cls.query.filter_by(email=usernameOrEmail).first() # SELECT * FROM users WHERE email = email LIMIT 1"
         
-        
+
             # if user exist return the user else return None
             return user
         except Exception as ex:

@@ -32,7 +32,9 @@ class UserRegisterCRUD():
 
 
         # check if username or email not exit.
-        user = UserModel.find_user(self.username, self.email) 
+        user = UserModel.find_user(self.username) 
+        if user is None:
+            user = UserModel.find_user( self.email) 
         if user is not None:
             return  {   "status": 400,
                         "message": "this user is existing before"
@@ -56,7 +58,7 @@ class UserRegisterCRUD():
         )
         try:
             user.save_to_db()
-            check_user = UserModel.find_user(self.username, self.email) 
+            check_user = UserModel.find_user(self.username) 
             if check_user is not None:
                 # the url of app lik: http://localhost:5000
                 link = request.url_root[:-1] + url_for("userconfirm", token=token)
