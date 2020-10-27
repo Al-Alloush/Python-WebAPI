@@ -21,11 +21,7 @@ def valid_password(password):
         len(set(st.ascii_lowercase).intersection(password)) <= 0 or \
         len(set(st.ascii_uppercase).intersection(password)) <= 0 or \
         len(set(st.punctuation).intersection(password)) <= 0 :
-        return {"status": 401,
-                "message":  "password must be longer than 5 and less than 18,\
-                must contain at least one number, one uppercase letter, \
-                one lowercase letter, and one punctuation"
-                }
+        return False
     return True
 
 def verify_password(hashed_password, stored_salt, password):

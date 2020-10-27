@@ -20,9 +20,13 @@ class UserRegisterCRUD():
                     }
         # if valid return True, else retrun json
         valid_pass = valid_password(self.password)
-        if valid_pass is not True:
+        if not valid_pass:
             # if password not valid retrun error message with status: 401
-            return valid_pass
+            return {"status": 401,
+                    "message":  "password must be longer than 5 and less than 18,\
+                    must contain at least one number, one uppercase letter, \
+                    one lowercase letter, and one punctuation"
+                    }
 
 
         # check if username or email not exit.
