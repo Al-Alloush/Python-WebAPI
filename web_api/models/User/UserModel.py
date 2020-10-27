@@ -1,6 +1,6 @@
 import datetime, uuid, time
 #
-from resources.sql_db_alchemy import db
+from dbs_connections.sql_db_alchemy import db
 from resources.global_functions import (
     current_local_time
 )
