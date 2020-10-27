@@ -6,6 +6,7 @@ from resources.sql_db_alchemy import db
 from models.User.UserModel import UserModel
 from API.User.UserLogin import UserLogin
 from API.User.UserRegister import UserRegister
+from API.User.UserConfirm import UserConfirm
 from resources.global_functions import (
     hashing_text, current_local_time
 )
@@ -25,6 +26,7 @@ api = Api(app)
 
 api.add_resource(UserRegister, '/register')
 api.add_resource(UserLogin, '/login')
+api.add_resource(UserConfirm, '/userconfirm/<string:token>')
 
 # to create all tables with the first requst in app and add the SuperAdmin user
 @app.before_first_request
@@ -33,6 +35,7 @@ def create_tables():
     username = "Al-Alloush"
     email = "ahmad@al-alloush.com"
     salt = str(os.urandom(32))
+    token = hashing_text(str(uuid.uuid4), salt) 
     userType = 1 #SuberAdmin
     current_time = current_local_time()
     existUser = UserModel.find_user(username, email)
@@ -49,7 +52,9 @@ def create_tables():
             birthday= "1979-5-5",
             userType= userType,
             login_date= current_time,
-            acc_verified= True  )
+            acc_verified= True,
+            token=token
+            )
         try:
             user.save_to_db()
             return {"message": "User created successfully."}, 201

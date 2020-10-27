@@ -25,8 +25,9 @@ class UserModel(db.Model):
     login_date  = db.Column(db.DateTime)
     acc_verified = db.Column(db.Boolean, default=False)
     register_date = db.Column(db.DateTime, default=current_local_time())
+    token = db.Column(db.String(500))
 
-    def __init__(self, _id, username, email, password, salt, first_name, last_name, birthday, userType, login_date, acc_verified):
+    def __init__(self, _id, username, email, password, salt, first_name, last_name, birthday, userType, login_date, acc_verified, token):
         self.id = _id
         self.username = username
         self.email = email
@@ -38,6 +39,7 @@ class UserModel(db.Model):
         self.userType = userType
         self.login_date = login_date
         self.acc_verified = acc_verified
+        self.token = token
 
 
     @classmethod
@@ -54,7 +56,17 @@ class UserModel(db.Model):
         except Exception as ex:
             return None
        
+    @classmethod
+    def activate_account(cls, token):
+        try:
+            user = cls.query.filter_by(token=token).first() # SELECT * FROM users WHERE token = token LIMIT 1"
+            user.acc_verified = True
+            user.save_to_db()
+            return True
+        except Exception as ex:
+            return False
 
+        return False
 
     def save_to_db(self):
         # add function work for both the insert and the update, updae if retrive an Id

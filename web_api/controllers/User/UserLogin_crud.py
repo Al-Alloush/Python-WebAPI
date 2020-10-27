@@ -24,6 +24,13 @@ class UserLoginCRUD():
                         "message": "username or password was wrong!, please try agian"
                     }
 
+        # check if user Activate his Account or not
+        if user.acc_verified is False:
+            return  {   "status": 401,
+                        "message": "please check your email and Activate your Account"
+                    }
+
+
         return  {"status": 200,
                  "message": "Login Success"
                 }
